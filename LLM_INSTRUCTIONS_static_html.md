@@ -120,11 +120,11 @@ BE SURE to await the variable, `window.frame.sdk.context.user` returns a Promise
 
 Since the frame will be loaded in an iframe, you can not use normal `<a href>` links.
 
-To open a URL, call `await sdk.actions.openUrl({ url: URL });`
+To open a URL, call `await window.frame.sdk.actions.openUrl({ url: URL });`
 
 #### Intent URLs:
 
-You can use sdk.actions to trigger specific events in Warpcast:
+You can use window.frame.sdk.actions to trigger specific events in Warpcast:
 
 Creating a cast: 
 
@@ -134,7 +134,7 @@ const targetURL = 'https://my-website.com';
 
 const finalUrl = `https://warpcast.com/~/compose?text=${encodeURIComponent(targetText)}&embeds[]=${encodeURIComponent(targetURL)};
 
-await sdk.actions.openUrl({ url: finalUrl })
+await window.frame.sdk.actions.openUrl({ url: finalUrl })
 ```
 
 Linking to a profile:
@@ -144,7 +144,7 @@ const fid = 2;
 
 const finalUrl = `https://warpcast.com/~/profiles/${fid}`;
 
-await sdk.actions.openUrl({ url: finalUrl })
+await window.frame.sdk.actions.openUrl({ url: finalUrl })
 ```
 
 Both of these will _close your frame_ and open the respective page in Warpcast web or mobile.
@@ -153,13 +153,13 @@ Both of these will _close your frame_ and open the respective page in Warpcast w
 
 Instead of closing your frame and opening the profile page in Warpcast, you can call
 
-`await sdk.actions.viewProfile({ fid })`
+`await window.frame.sdk.actions.viewProfile({ fid })`
 
 To open a modal in the frame displaying the fid's basic information.
 
 #### Onchain events:
 
-To make calls to the network, call `await sdk.wallet.ethProvider.request({})`
+To make calls to the network, call `await window.frame.sdk.wallet.ethProvider.request({})`
 
 IMPORTANT: By default there is no ethers or wagmi interaction, you HAVE to make all requests by calling ethProvider.request.
 
