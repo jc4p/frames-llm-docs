@@ -6,9 +6,11 @@ The goal of this document is to explain how to implement Frames V2 functionality
 
 The frame SDK is hosted at https://www.npmjs.com/package/@farcaster/frame-sdk and can be installed by:
 
+```
 npm: npm i @farcaster/frame-sdk
 yarn: yarn add @farcaster/frame-sdk
 bun: bun i @farcaster/frame-sdk
+```
 
 ### Setup
 
