@@ -108,7 +108,7 @@ export type FrameContext = {
 
 `await window.frame.sdk.context.user` -- Returns a user object like { fid, username }
 
-BE SURE to await the variable, `window.frame.sdk.context.user` it returns a Promise.
+BE SURE to await the variable, `window.frame.sdk.context.user` returns a Promise.
 
 
 #### Opening Links:
