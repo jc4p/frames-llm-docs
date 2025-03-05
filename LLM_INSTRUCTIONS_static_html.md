@@ -132,7 +132,7 @@ Creating a cast:
 const targetText = 'This is a sample text';
 const targetURL = 'https://my-website.com';
 
-const finalUrl = `https://warpcast.com/~/compose?text=${encodeURIComponent(targetText)}&embeds[]=${encodeURIComponent(targetURL)};
+const finalUrl = `https://warpcast.com/~/compose?text=${encodeURIComponent(targetText)}&embeds[]=${encodeURIComponent(targetURL)};`
 
 await window.frame.sdk.actions.openUrl({ url: finalUrl })
 ```
