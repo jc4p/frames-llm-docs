@@ -199,8 +199,6 @@ const CONTRACT_ADDRESS = '0x...' // The address to your contract
 
 const functionSignature = '0x4fd66eae'; // An example, keccac256('getPlayerStats(address)').substring(0, 10)
 
-const functionPayload = functionSignature + paddedAddress;
-
 try {
   // Get the user's wallet address
   const accounts = await frame.sdk.wallet.ethProvider.request({
@@ -212,6 +210,8 @@ try {
   }
 
   const paddedAddress = '000000000000000000000000' + accounts[0].slice(2);
+
+  const functionPayload = functionSignature + paddedAddress;
 
   contractData = await window.frame.sdk.wallet.ethProvider.request({
     method: 'eth_call',
