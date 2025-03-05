@@ -26,6 +26,7 @@ Here are some additional resources for working with Frames V2:
 
 - [Frame V2 Specification](https://docs.farcaster.xyz/developers/frames/v2/spec) - The complete Frame V2 specification, including many more actions than those covered in the instruction files
 - [Warpcast Intents](https://docs.farcaster.xyz/reference/warpcast/cast-composer-intents) - Documentation for Warpcast Cast Composer Intents
+- [Local Debugging](https://framesjs.org/guides/debugger) - Documentation for using the local framesjs debugger (so you don't have to use ngrok)
 - [Deploying and Debugging Frames V2](https://near-sage-684.notion.site/Deploying-a-Frame-V2-App-1a6ed943b83d807a9570d636ce23d7b5) - A guide for deploying and debugging your Frames V2 application
 - [Custom Share Images](https://near-sage-684.notion.site/Custom-Share-Images-for-a-Frame-V2-1a7ed943b83d80d7a0a8c1549c4d93de) - Instructions for implementing custom share images in Frames V2
 
