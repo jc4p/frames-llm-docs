@@ -113,7 +113,7 @@ BE SURE to await the variable, `frame.sdk.context.user` returns a Promise.
 
 #### Opening Links:
 
-Since the frame will be loaded in an iframe, you can not use normal <a href> links.
+Since the frame will be loaded in an iframe, you can not use normal `<a href>` links.
 
 To open a URL, call `await sdk.actions.openUrl({ url: URL });`
 
