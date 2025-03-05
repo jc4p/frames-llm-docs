@@ -6,7 +6,7 @@ The goal of this document is to explain how to implement Frames V2 functionality
 
 1. Import the Frame SDK:
 
-Somewhere in your <head>, insert:
+Somewhere in your `<head>`, insert:
 
 `<script src="https://cdn.jsdelivr.net/npm/@farcaster/frame-sdk/dist/index.min.js"></script>`
 
