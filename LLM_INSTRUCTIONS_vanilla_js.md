@@ -80,11 +80,11 @@ type FrameEmbed = {
 
 ### Loading
 
-When your app is loaded and ready to go, you need to call `window.frame.sdk.actions.ready();` otherwise your frame will never get past the splash screen.
+When your app is loaded and ready to go, you need to call `frame.sdk.actions.ready();` otherwise your frame will never get past the splash screen.
 
 ### SDK API:
 
-The window.frame.sdk.context object looks like:
+The frame.sdk.context object looks like:
 
 ```
 export type FrameContext = {
@@ -106,9 +106,9 @@ export type FrameContext = {
 
 #### User Authentication:
 
-`await window.frame.sdk.context.user` -- Returns a user object like { fid, username }
+`await frame.sdk.context.user` -- Returns a user object like { fid, username }
 
-BE SURE to await the variable, `window.frame.sdk.context.user` returns a Promise.
+BE SURE to await the variable, `frame.sdk.context.user` returns a Promise.
 
 
 #### Opening Links:
@@ -163,7 +163,7 @@ Example commands:
 Checking chain Id:
 
 ```
-const chainId = await window.frame.sdk.wallet.ethProvider.request({
+const chainId = await frame.sdk.wallet.ethProvider.request({
   method: 'eth_chainId'
 });
 
@@ -192,7 +192,7 @@ try {
   const to = '0x....' // ETH address you want to send the amount to
 
   // Get the user's wallet address
-  const accounts = await window.frame.sdk.wallet.ethProvider.request({
+  const accounts = await frame.sdk.wallet.ethProvider.request({
     method: 'eth_requestAccounts'
   });
   
@@ -206,7 +206,7 @@ try {
   const weiValue = this.ethToWei(amount);
   
   // Send transaction
-  const txHash = await window.frame.sdk.wallet.ethProvider.request({
+  const txHash = await frame.sdk.wallet.ethProvider.request({
     method: 'eth_sendTransaction',
     params: [{
       from: accounts[0],
@@ -248,7 +248,7 @@ const data = `${transferFunctionSignature}${recipientPadded}${paddedAmount}`;
 
 try {
   // Get the user's wallet address
-  const accounts = await window.frame.sdk.wallet.ethProvider.request({
+  const accounts = await frame.sdk.wallet.ethProvider.request({
     method: 'eth_requestAccounts'
   });
   
@@ -256,7 +256,7 @@ try {
     throw new Error('No wallet connected');
   }
 
-  const tx = await window.frame.sdk.wallet.ethProvider.request({
+  const tx = await frame.sdk.wallet.ethProvider.request({
     method: 'eth_sendTransaction',
     params: [{
       from: accounts[0],
@@ -281,7 +281,7 @@ const functionSignature = '0x4fd66eae'; // An example, keccac256('getPlayerStats
 
 try {
   // Get the user's wallet address
-  const accounts = await window.frame.sdk.wallet.ethProvider.request({
+  const accounts = await frame.sdk.wallet.ethProvider.request({
     method: 'eth_requestAccounts'
   });
   
@@ -293,7 +293,7 @@ try {
 
   const functionPayload = functionSignature + paddedAddress;
 
-  contractData = await window.window.frame.sdk.wallet.ethProvider.request({
+  contractData = await window.frame.sdk.wallet.ethProvider.request({
     method: 'eth_call',
     params: [{
         to: CONTRACT_ADDRESS,
@@ -332,12 +332,12 @@ try {
 
 ### Known Issues
 
-1. Sometimes `await window.frame.sdk.context.user` returns an object which has a `user` object inside it, not the `{ fid, username }` it's supposed to.
+1. Sometimes `await frame.sdk.context.user` returns an object which has a `user` object inside it, not the `{ fid, username }` it's supposed to.
 
 Workaround:
 
 ```
-let user = await window.frame.sdk.context.user;
+let user = await frame.sdk.context.user;
 if (user.user) {
   user = user.user
 }

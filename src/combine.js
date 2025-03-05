@@ -24,7 +24,7 @@ async function combineFiles() {
       let appendContent = sharedContent;
       
       // Special case for vanilla_js.md - replace frame. with window.frame.
-      if (file === 'vanilla_js.md') {
+      if (file === 'static_html.md') {
         appendContent = sharedContent.replace(/frame\./g, 'window.frame.');
       }
       
