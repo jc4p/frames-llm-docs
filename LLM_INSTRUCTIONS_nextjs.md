@@ -140,7 +140,7 @@ BE SURE to await the variable, `frame.sdk.context.user` returns a Promise.
 
 Since the frame will be loaded in an iframe, you can not use normal `<a href>` links.
 
-To open a URL, call `await frame.sdk.actions.openUrl({ url: URL });`
+To open a URL, call `await frame.sdk.actions.openUrl(url);`
 
 #### Intent URLs:
 
@@ -154,7 +154,7 @@ const targetURL = 'https://my-website.com';
 
 const finalUrl = `https://warpcast.com/~/compose?text=${encodeURIComponent(targetText)}&embeds[]=${encodeURIComponent(targetURL)};`
 
-await frame.sdk.actions.openUrl({ url: finalUrl })
+await frame.sdk.actions.openUrl(finalUrl)
 ```
 
 Linking to a profile:
@@ -164,7 +164,7 @@ const fid = 2;
 
 const finalUrl = `https://warpcast.com/~/profiles/${fid}`;
 
-await frame.sdk.actions.openUrl({ url: finalUrl })
+await frame.sdk.actions.openUrl(finalUrl)
 ```
 
 Both of these will _close your frame_ and open the respective page in Warpcast web or mobile.
@@ -200,6 +200,37 @@ if (chainIdDecimal !== 8453) {
 } else {
   console.log('Confirmed to be on Base')
 }
+```
+
+Switching to base:
+
+```
+await frame.sdk.wallet.ethProvider.request({
+  method: 'wallet_switchEthereumChain',
+  params: [{ chainId: '0x2105' }] // Base mainnet chainId
+});
+```
+
+Minting:
+
+```
+// Get the account
+const accounts = await frame.sdk.wallet.ethProvider.request({
+  method: 'eth_requestAccounts'
+});
+const walletAddress = accounts[0];
+
+// Create the mint function signature
+const mintFunctionSignature = '0x1249c58b'; // keccak256('mint()')
+
+const txHash = await frame.sdk.wallet.ethProvider.request({
+  method: 'eth_sendTransaction',
+  params: [{
+    from: walletAddress,
+    to: contractAddress,
+    data: mintFunctionSignature
+  }]
+});
 ```
 
 Sending an ETH transaction:
@@ -318,7 +349,7 @@ try {
 
   const functionPayload = functionSignature + paddedAddress;
 
-  contractData = await window.frame.sdk.wallet.ethProvider.request({
+  contractData = await frame.sdk.wallet.ethProvider.request({
     method: 'eth_call',
     params: [{
         to: CONTRACT_ADDRESS,
