@@ -53,7 +53,7 @@ BE SURE to await the variable, `frame.sdk.context` returns a Promise.
 
 Since the frame will be loaded in an iframe, you can not use normal `<a href>` links.
 
-To open a URL, call `await frame.sdk.actions.openUrl(url);`
+To open a URL, call `await frame.sdk.actions.openUrl({ url });`
 
 #### Intent URLs:
 
@@ -67,28 +67,16 @@ const targetURL = 'https://my-website.com';
 
 const finalUrl = `https://warpcast.com/~/compose?text=${encodeURIComponent(targetText)}&embeds[]=${encodeURIComponent(targetURL)};`
 
-await frame.sdk.actions.openUrl(finalUrl)
+await frame.sdk.actions.openUrl({ url: finalUrl })
 ```
-
-Linking to a profile:
-
-```
-const fid = 2;
-
-const finalUrl = `https://warpcast.com/~/profiles/${fid}`;
-
-await frame.sdk.actions.openUrl(finalUrl)
-```
-
-Both of these will _close your frame_ and open the respective page in Warpcast web or mobile.
 
 ### Profile Preview
 
-Instead of closing your frame and opening the profile page in Warpcast, you can call
+To link to a profile page in Warpcast you can do: 
 
 `await frame.sdk.actions.viewProfile({ fid })`
 
-To open a modal in the frame displaying the fid's basic information.
+This will minimize your app and show their profile page.
 
 #### Onchain events:
 
