@@ -55,12 +55,14 @@ export default function RootLayout({ children }) {
 import * as frame from '@farcaster/frame-sdk'
 
 export async function initializeFrame() {
-  const user = await frame.sdk.context.user
+  const context = await frame.sdk.context.user
 
-  if (!user || !user.fid) {
-    // most likely not in a frame
+  if (!context || !context.user) {
+    console.log('not in frame context')
     return
   }
+
+  const user = context.user
 
   window.userFid = user.fid;
 
