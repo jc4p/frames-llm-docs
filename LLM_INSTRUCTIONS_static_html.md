@@ -111,9 +111,27 @@ export type FrameContext = {
 
 #### User Authentication:
 
-`await window.frame.sdk.context.user` -- Returns a user object like { fid, username }
+```
+document.addEventListener(async () => {
+  const context = await window.frame.sdk.context.user
 
-BE SURE to await the variable, `window.frame.sdk.context.user` returns a Promise.
+  if (!context || !context.user) {
+    console.log('not in frame context')
+    return
+  }
+
+  const user = context.user
+
+  console.log('Received user', {
+    fid: user.fid,
+    username: user.username
+  })
+
+  // Do something with the user object
+})
+```
+
+BE SURE to await the variable, `window.frame.sdk.context` returns a Promise.
 
 
 #### Opening Links:
