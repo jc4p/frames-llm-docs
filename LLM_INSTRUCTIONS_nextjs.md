@@ -55,7 +55,7 @@ export default function RootLayout({ children }) {
 import * as frame from '@farcaster/frame-sdk'
 
 export async function initializeFrame() {
-  const context = await frame.sdk.context.user
+  const context = await frame.sdk.context
 
   if (!context || !context.user) {
     console.log('not in frame context')
@@ -67,6 +67,7 @@ export async function initializeFrame() {
   window.userFid = user.fid;
 
   // You can now use the window.userFid in any of your React code, e.g. using a useEffect that listens for it to be set
+  // or trigger a custom event or anything you want
 
   // Call the ready function to remove your splash screen when in a frame
   await frame.sdk.actions.ready();
@@ -135,7 +136,7 @@ export type FrameContext = {
 
 ```
 document.addEventListener(async () => {
-  const context = await frame.sdk.context.user
+  const context = await frame.sdk.context
 
   if (!context || !context.user) {
     console.log('not in frame context')
@@ -401,7 +402,8 @@ try {
 Workaround:
 
 ```
-let user = await frame.sdk.context.user;
+const context = await frame.sdk.context;
+let user = context.user;
 if (user.user) {
   user = user.user
 }

@@ -110,7 +110,7 @@ export type FrameContext = {
 
 ```
 document.addEventListener(async () => {
-  const context = await frame.sdk.context.user
+  const context = await frame.sdk.context
 
   if (!context || !context.user) {
     console.log('not in frame context')
@@ -376,7 +376,8 @@ try {
 Workaround:
 
 ```
-let user = await frame.sdk.context.user;
+const context = await frame.sdk.context;
+let user = context.user;
 if (user.user) {
   user = user.user
 }
