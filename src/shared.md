@@ -241,33 +241,3 @@ try {
 }
 ```
 
-### Known Issues
-
-1. Sometimes `await sdk.context.user` returns an object which has a `user` object inside it, not the `{ fid, username }` it's supposed to.
-
-Workaround:
-
-```
-const context = await sdk.context;
-let user = context.user;
-if (user.user) {
-  user = user.user
-}
-```
-
-2. Adding two embeds to a URL causes the second one to disappear if the user modifies the cast intent text
-
-Example:
-
-```
-import { sdk } from '@farcaster/miniapp-sdk'
-
-await sdk.actions.composeCast({
-  text: 'This is a sample text',
-  embeds: ['https://my-website.com', 'https://another-link.com'] // Second link, or even a link to an image
-})
-```
-
-While this will correctly create the cast intent and show the text and the target links, if the user modifies the text of the cast the second will link disappear.
-
-Workaround: None currently known
