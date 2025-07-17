@@ -1,15 +1,15 @@
-## Frame V2 Integration In NextJS
+## Mini Apps Integration In NextJS
 
-The goal of this document is to explain how to implement Frames V2 functionality in a NextJS app.
+The goal of this document is to explain how to implement Mini Apps functionality in a NextJS app.
 
 ### Installation
 
-The frame SDK is hosted at https://www.npmjs.com/package/@farcaster/frame-sdk and can be installed by:
+The Mini Apps SDK is hosted at https://www.npmjs.com/package/@farcaster/miniapp-sdk and can be installed by:
 
 ```
-npm: npm i @farcaster/frame-sdk
-yarn: yarn add @farcaster/frame-sdk
-bun: bun i @farcaster/frame-sdk
+npm: npm i @farcaster/miniapp-sdk
+yarn: yarn add @farcaster/miniapp-sdk
+bun: bun i @farcaster/miniapp-sdk
 ```
 
 ### Setup
@@ -52,13 +52,13 @@ export default function RootLayout({ children }) {
 3. Create  `/lib/frame.js`
 
 ```
-import * as frame from '@farcaster/frame-sdk'
+import { sdk } from '@farcaster/miniapp-sdk'
 
 export async function initializeFrame() {
-  const context = await frame.sdk.context
+  const context = await sdk.context
 
   if (!context || !context.user) {
-    console.log('not in frame context')
+    console.log('not in mini app context')
     return
   }
 
@@ -69,8 +69,8 @@ export async function initializeFrame() {
   // You can now use the window.userFid in any of your React code, e.g. using a useEffect that listens for it to be set
   // or trigger a custom event or anything you want
 
-  // Call the ready function to remove your splash screen when in a frame
-  await frame.sdk.actions.ready();
+  // Call the ready function to remove your splash screen when in a mini app
+  await sdk.actions.ready();
 }
 ```
 
@@ -108,11 +108,11 @@ export default function Page() {
 
 ### Loading
 
-When your app is loaded and ready to go, you need to call `frame.sdk.actions.ready();` otherwise your frame will never get past the splash screen.
+When your app is loaded and ready to go, you need to call `sdk.actions.ready();` otherwise your mini app will never get past the splash screen.
 
 ### SDK API:
 
-The frame.sdk.context object looks like:
+The sdk.context object looks like:
 
 ```
 export type FrameContext = {
@@ -136,10 +136,10 @@ export type FrameContext = {
 
 ```
 document.addEventListener(async () => {
-  const context = await frame.sdk.context
+  const context = await sdk.context
 
   if (!context || !context.user) {
-    console.log('not in frame context')
+    console.log('not in mini app context')
     return
   }
 
@@ -154,50 +154,62 @@ document.addEventListener(async () => {
 })
 ```
 
-BE SURE to await the variable, `frame.sdk.context` returns a Promise.
+BE SURE to await the variable, `sdk.context` returns a Promise.
 
 
 #### Opening Links:
 
-Since the frame will be loaded in an iframe, you can not use normal `<a href>` links.
+Since the mini app will be loaded in an iframe, you can not use normal `<a href>` links.
 
-To open a URL, call `await frame.sdk.actions.openUrl({ url });`
+To open a URL, call `await sdk.actions.openUrl({ url });`
 
 #### Intent URLs:
 
-You can use frame.sdk.actions to trigger specific events in Warpcast:
+You can use sdk.actions to trigger specific events in Warpcast:
 
 Creating a cast: 
 
 ```
-const targetText = 'This is a sample text';
-const targetURL = 'https://my-website.com';
+import { sdk } from '@farcaster/miniapp-sdk'
 
-const finalUrl = `https://warpcast.com/~/compose?text=${encodeURIComponent(targetText)}&embeds[]=${encodeURIComponent(targetURL)};`
-
-await frame.sdk.actions.openUrl({ url: finalUrl })
+await sdk.actions.composeCast({
+  text: 'This is a sample text',
+  embeds: ['https://my-website.com']
+})
 ```
+
+Parameters:
+- `text` (optional): Type: string - Suggested text for the body of the cast. Mentions can be included using the human-readable form (e.g. @farcaster).
+- `embeds` (optional): Type: [] | [string] | [string, string] - Suggested embeds. Max two.
+- `parent` (optional): Type: { type: 'cast'; hash: string } - Suggested parent of the cast.
+- `close` (optional): Type: boolean - Whether the app should be closed when this action is called. If true the app will be closed and the action will resolve with no result.
+- `channelKey` (optional): Type: string - Whether the cast should be posted to a channel.
 
 ### Profile Preview
 
 To link to a profile page in Warpcast you can do: 
 
-`await frame.sdk.actions.viewProfile({ fid })`
+`await sdk.actions.viewProfile({ fid })`
 
 This will minimize your app and show their profile page.
 
 #### Onchain events:
 
-To make calls to the network, call `await frame.sdk.wallet.ethProvider.request({})`
+To make calls to the network, call `await sdk.wallet.ethProvider.request({})`
 
-IMPORTANT: By default there is no ethers or wagmi interaction, you HAVE to make all requests by calling ethProvider.request.
+IMPORTANT: The ethProvider can only handle write operations and very basic reads. It supports:
+- `eth_sendTransaction` - for sending transactions
+- `signTypedDataV4` - for signing typed data
+- Basic operations like `eth_chainId`, `eth_requestAccounts`, and `wallet_switchEthereumChain`
+
+For anything involving `eth_call` or other read operations beyond the basics listed above, you need to use viem or wagmi with a custom (or mainnet) RPC URL. The built-in ethProvider cannot handle complex read operations.
 
 Example commands:
 
 Checking chain Id:
 
 ```
-const chainId = await frame.sdk.wallet.ethProvider.request({
+const chainId = await sdk.wallet.ethProvider.request({
   method: 'eth_chainId'
 });
 
@@ -214,7 +226,7 @@ if (chainIdDecimal !== 8453) {
 Switching to base:
 
 ```
-await frame.sdk.wallet.ethProvider.request({
+await sdk.wallet.ethProvider.request({
   method: 'wallet_switchEthereumChain',
   params: [{ chainId: '0x2105' }] // Base mainnet chainId
 });
@@ -224,7 +236,7 @@ Minting:
 
 ```
 // Get the account
-const accounts = await frame.sdk.wallet.ethProvider.request({
+const accounts = await sdk.wallet.ethProvider.request({
   method: 'eth_requestAccounts'
 });
 const walletAddress = accounts[0];
@@ -232,7 +244,7 @@ const walletAddress = accounts[0];
 // Create the mint function signature
 const mintFunctionSignature = '0x1249c58b'; // keccak256('mint()')
 
-const txHash = await frame.sdk.wallet.ethProvider.request({
+const txHash = await sdk.wallet.ethProvider.request({
   method: 'eth_sendTransaction',
   params: [{
     from: walletAddress,
@@ -257,7 +269,7 @@ try {
   const to = '0x....' // ETH address you want to send the amount to
 
   // Get the user's wallet address
-  const accounts = await frame.sdk.wallet.ethProvider.request({
+  const accounts = await sdk.wallet.ethProvider.request({
     method: 'eth_requestAccounts'
   });
   
@@ -271,7 +283,7 @@ try {
   const weiValue = this.ethToWei(amount);
   
   // Send transaction
-  const txHash = await frame.sdk.wallet.ethProvider.request({
+  const txHash = await sdk.wallet.ethProvider.request({
     method: 'eth_sendTransaction',
     params: [{
       from: accounts[0],
@@ -313,7 +325,7 @@ const data = `${transferFunctionSignature}${recipientPadded}${paddedAmount}`;
 
 try {
   // Get the user's wallet address
-  const accounts = await frame.sdk.wallet.ethProvider.request({
+  const accounts = await sdk.wallet.ethProvider.request({
     method: 'eth_requestAccounts'
   });
   
@@ -321,7 +333,7 @@ try {
     throw new Error('No wallet connected');
   }
 
-  const tx = await frame.sdk.wallet.ethProvider.request({
+  const tx = await sdk.wallet.ethProvider.request({
     method: 'eth_sendTransaction',
     params: [{
       from: accounts[0],
@@ -337,72 +349,14 @@ try {
 }
 ```
 
-Calling a custom function on a contract
-
-```
-const CONTRACT_ADDRESS = '0x...' // The address to your contract
-
-const functionSignature = '0x4fd66eae'; // An example, keccac256('getPlayerStats(address)').substring(0, 10)
-
-try {
-  // Get the user's wallet address
-  const accounts = await frame.sdk.wallet.ethProvider.request({
-    method: 'eth_requestAccounts'
-  });
-  
-  if (!accounts || !accounts[0]) {
-    throw new Error('No wallet connected');
-  }
-
-  const paddedAddress = '000000000000000000000000' + accounts[0].slice(2);
-
-  const functionPayload = functionSignature + paddedAddress;
-
-  contractData = await frame.sdk.wallet.ethProvider.request({
-    method: 'eth_call',
-    params: [{
-        to: CONTRACT_ADDRESS,
-        data: functionPayload,
-        from: paddedAddress
-    }, 'latest']
-  }).catch(error => {
-      console.log('Error response from contract:', error);
-      console.error('Contract call failed:', {
-          error,
-          message: error?.message,
-          data: error?.data,
-          code: error?.code
-      });
-      throw error; // Re-throw if it's a different error
-  });
-
-  console.log('Raw contract response:', contractData);
-
-  if (!contractData || !contractData === '0x') {
-      console.log('Empty response from contract)
-      return;
-  }
-
-  const data = contractData.slice(2);
-
-  // Here you can parse the output of the data,
-  // e.g. if it's 3 numbers of each 32 bytes (64 characters)
-  // const fieldOne = parseInt(data.slice(0, 64), 16);
-  // const fieldTwo = parseInt(data.slice(64, 128), 16);
-  // const fieldThree = parseInt(data.slice(128, 192), 16);
-} catch (error) {
-  console.error('Error calling contract', error);
-}
-```
-
 ### Known Issues
 
-1. Sometimes `await frame.sdk.context.user` returns an object which has a `user` object inside it, not the `{ fid, username }` it's supposed to.
+1. Sometimes `await sdk.context.user` returns an object which has a `user` object inside it, not the `{ fid, username }` it's supposed to.
 
 Workaround:
 
 ```
-const context = await frame.sdk.context;
+const context = await sdk.context;
 let user = context.user;
 if (user.user) {
   user = user.user
@@ -414,13 +368,12 @@ if (user.user) {
 Example:
 
 ```
-const targetText = 'This is a sample text';
-const targetURL = 'https://my-website.com';
-const targetURLTwo = '' // Another link, or even a link to an image
+import { sdk } from '@farcaster/miniapp-sdk'
 
-const finalUrl = `https://warpcast.com/~/compose?text=${encodeURIComponent(targetText)}&embeds[]=${encodeURIComponent(targetURL)}&embeds[]=${encodeURIComponent(targetURLTwo)}`;
-
-await sdk.actions.openUrl({ url: finalUrl })
+await sdk.actions.composeCast({
+  text: 'This is a sample text',
+  embeds: ['https://my-website.com', 'https://another-link.com'] // Second link, or even a link to an image
+})
 ```
 
 While this will correctly create the cast intent and show the text and the target links, if the user modifies the text of the cast the second will link disappear.

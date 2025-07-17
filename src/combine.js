@@ -23,9 +23,9 @@ async function combineFiles() {
       // Determine what content to append
       let appendContent = sharedContent;
       
-      // Special case for vanilla_js.md - replace frame. with window.frame.
+      // Special case for static_html.md - replace sdk. with miniapp.sdk.
       if (file === 'static_html.md') {
-        appendContent = sharedContent.replace(/frame\./g, 'window.frame.');
+        appendContent = sharedContent.replace(/sdk\./g, 'miniapp.sdk.');
       }
       
       // Combine the content

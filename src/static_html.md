@@ -1,14 +1,14 @@
-## Frame V2 Integration In Static HTML
+## Mini Apps Integration In Static HTML
 
-The goal of this document is to explain how to implement Frames V2 functionality in a minimal static HTML app without npm or yarn or bun involved.
+The goal of this document is to explain how to implement Mini Apps functionality in a minimal static HTML app without npm or yarn or bun involved.
 
 ### Setup
 
-1. Import the Frame SDK:
+1. Import the Mini Apps SDK:
 
 Somewhere in your `<head>`, insert:
 
-`<script src="https://cdn.jsdelivr.net/npm/@farcaster/frame-sdk/dist/index.min.js"></script>`
+`<script src="https://cdn.jsdelivr.net/npm/@farcaster/miniapp-sdk/dist/index.min.js"></script>`
 
 2. Interact with the SDK:
 
@@ -16,10 +16,10 @@ Somewhere in your `<head>`, insert:
 // NOTE: Because it's await, you need to wrap your code in a function like this:
 document.addEventListener('DOMContentLoaded', async () => {
 
-  // You can now use the frame SDK under the namespace window.frame
+  // You can now use the Mini Apps SDK under the namespace miniapp.sdk
 
-  // Remove the splash screen and start your frame
-  window.frame.sdk.actions.ready();
+  // Remove the splash screen and start your mini app
+  miniapp.sdk.actions.ready();
 })
 ```
 

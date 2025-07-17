@@ -1,24 +1,24 @@
-## Frame V2 Integration In Vanilla JS
+## Mini Apps Integration In Vanilla JS
 
-The goal of this document is to explain how to implement Frames V2 functionality in a vanilla JS app which uses some sort of bundler, aka you have `npm` or `yarn` or `bun` as part of your package.json.
+The goal of this document is to explain how to implement Mini Apps functionality in a vanilla JS app which uses some sort of bundler, aka you have `npm` or `yarn` or `bun` as part of your package.json.
 
 ### Installation
 
-The frame SDK is hosted at https://www.npmjs.com/package/@farcaster/frame-sdk and can be installed by:
+The Mini Apps SDK is hosted at https://www.npmjs.com/package/@farcaster/miniapp-sdk and can be installed by:
 
 ```
-npm: npm i @farcaster/frame-sdk
-yarn: yarn add @farcaster/frame-sdk
-bun: bun i @farcaster/frame-sdk
+npm: npm i @farcaster/miniapp-sdk
+yarn: yarn add @farcaster/miniapp-sdk
+bun: bun i @farcaster/miniapp-sdk
 ```
 
 ### Setup
 
 #### Importing:
 
-You can import the Frames V2 SDK by using `import * as frame from '@farcaster/frame-sdk'`
+You can import the Mini Apps SDK by using `import { sdk } from '@farcaster/miniapp-sdk'`
 
-The Frames V2 SDK can now be accessed via the `frame` object.
+The Mini Apps SDK can now be accessed via the `sdk` object.
 
 #### fc:frame
 

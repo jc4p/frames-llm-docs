@@ -1,15 +1,15 @@
-## Frame V2 Integration In NextJS
+## Mini Apps Integration In NextJS
 
-The goal of this document is to explain how to implement Frames V2 functionality in a NextJS app.
+The goal of this document is to explain how to implement Mini Apps functionality in a NextJS app.
 
 ### Installation
 
-The frame SDK is hosted at https://www.npmjs.com/package/@farcaster/frame-sdk and can be installed by:
+The Mini Apps SDK is hosted at https://www.npmjs.com/package/@farcaster/miniapp-sdk and can be installed by:
 
 ```
-npm: npm i @farcaster/frame-sdk
-yarn: yarn add @farcaster/frame-sdk
-bun: bun i @farcaster/frame-sdk
+npm: npm i @farcaster/miniapp-sdk
+yarn: yarn add @farcaster/miniapp-sdk
+bun: bun i @farcaster/miniapp-sdk
 ```
 
 ### Setup
@@ -52,13 +52,13 @@ export default function RootLayout({ children }) {
 3. Create  `/lib/frame.js`
 
 ```
-import * as frame from '@farcaster/frame-sdk'
+import { sdk } from '@farcaster/miniapp-sdk'
 
 export async function initializeFrame() {
-  const context = await frame.sdk.context
+  const context = await sdk.context
 
   if (!context || !context.user) {
-    console.log('not in frame context')
+    console.log('not in mini app context')
     return
   }
 
@@ -69,8 +69,8 @@ export async function initializeFrame() {
   // You can now use the window.userFid in any of your React code, e.g. using a useEffect that listens for it to be set
   // or trigger a custom event or anything you want
 
-  // Call the ready function to remove your splash screen when in a frame
-  await frame.sdk.actions.ready();
+  // Call the ready function to remove your splash screen when in a mini app
+  await sdk.actions.ready();
 }
 ```
 
